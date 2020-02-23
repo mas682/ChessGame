@@ -1,0 +1,47 @@
+body {
+    background-color: DarkCyan;
+}
+
+.board {
+    display: flex;
+    justify-content: flex-start;
+    width: 65%;
+    margin-left: 10%;
+    flex-wrap: wrap;
+    transform: skewX(-3deg);
+}
+
+.square {
+    width: 12.0%;
+    height: 100px;
+    display: inline-block;
+    border: 1px solid black;
+}
+
+.even {
+  background-color: black;
+  }
+
+.squareEnd {
+    width: 1.4%;
+    height: 100px;
+    display: inline-block;
+    border: 1px solid black;
+}
+
+.odd {
+    background-color: WhiteSmoke;
+}
+
+.bottomBox {
+    width: 12.0%;
+    height: 10px;
+    display: inline-block;
+    border: 1px solid black;
+}
+
+.triangle-topleft {
+    display: inline-block;
+    border-top: 12px solid black;
+    border-right: 14px solid transparent;
+}
