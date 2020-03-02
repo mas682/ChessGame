@@ -9,7 +9,18 @@ body {
     width: 65%;
     margin-left: 10%;
     flex-wrap: wrap;
+    /* can mess with this once actual game made */
     transform: skewX(-3deg);
+    /*transform: rotateX(70deg); */
+
+}
+
+img {
+    height: 120px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
 }
 
 /* specification for squares on board */
@@ -22,12 +33,12 @@ body {
 
 /* color for even squares */
 .even {
-  background-color: black;
+  background-color: DimGrey;
   }
 
 /* color for odd squares */
 .odd {
-    background-color: WhiteSmoke;
+    background-color: GainsBoro;
 }
 
 /* sizing for block on far right side of board */
@@ -49,6 +60,6 @@ body {
 /* small triangle at bottom right of board */
 .triangle-topleft {
     display: inline-block;
-    border-top: 12px solid black;
+    border-top: 12px solid DimGrey;
     border-right: 14px solid transparent;
 }
