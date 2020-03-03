@@ -3,38 +3,71 @@
 let flashing = []
 // used to synchronzie block color change
 let flip_color = false
+let lastClicked = 0
 
 // called when a block is clicked on
 // if the block was already clicked on, remove it from flashing
 // otherwise, add it to the set of flashing blocks
 function setFlash(e, elem) {
     e.preventDefault();
-    let index = flashing.indexOf(elem.id);
-    if(index < 0)
+    let parent = elem.parentNode;
+    let index = flashing.indexOf(parent.id);
+    if(index < 0 && flashing.length <= 0 && lastClicked != parent.id)
     {
-        flashing.push(elem.id);
+        flashing.push(parent.id);
+        lastClicked = parent.id;
+    }
+    else if (lastClicked != parent.id) {
+        stopFlash();
+        flashing.push(parent.id);
+        lastClicked = parent.id;
     }
     else
     {
-        flashing.splice(index, 1);
-        if(elem.style.backgroundColor == "red")
+    need to block all this out and then just do stop flash
+        //flashing.splice(index, 1);
+        if(parent.style.backgroundColor == "red")
         {
-            if(elem.className === "square even")
+            if(parent.className === "square even")
             {
-                elem.style.backgroundColor = "grey";
+                parent.style.backgroundColor = "grey";
             }
             else
             {
-                elem.style.backgroundColor = "white";
+                parent.style.backgroundColor = "white";
             }
         }
     }
     // diagonalFlash(elem.id);
     //verticalFlash(elem.id);
     //horizontalFlash(elem.id);
-    knightLMove(elem.id);
+    knightLMove(parent.id);
 }
 
+function stopFlash()
+{
+    let i = 0;
+    let flashingLength = flashing.length;
+    let index = -1;
+    while(i < flashing.length)
+    {
+        index = flashing.pop();
+        elem = document.getElementById(flashing[index]);
+        // if blocks color is not red and it should be flashing, set it
+        if(elem.style.backgroundColor == "red")
+        {
+            if(elem.className == "square even")
+            {
+                elem.style.backgroundColor = "DimGrey";
+            }
+            else
+            {
+                elem.style.backgroundColor = "GainsBoror";
+            }
+        }
+        i++;
+    }
+}
 // function to manage making blocks switch colors
 function flash()
 {
@@ -56,11 +89,11 @@ function flash()
         {
             if(elem.className == "square even")
             {
-                elem.style.backgroundColor = "black";
+                elem.style.backgroundColor = "DimGrey";
             }
             else
             {
-                elem.style.backgroundColor = "white";
+                elem.style.backgroundColor = "GainsBoror";
             }
         }
     }
@@ -283,7 +316,8 @@ function knightLMove(pos)
 
 
 // get all the blocks
-elems = document.querySelectorAll(".square");
+//elems = document.querySelectorAll(".square");
+elems = document.getElementsByTagName('img');
 let i = 0;
 for(i = 0; i < elems.length; i++)
 {
