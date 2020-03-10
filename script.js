@@ -16,32 +16,31 @@ function setFlash(e, elem) {
     {
         flashing.push(parent.id);
         lastClicked = parent.id;
+        if(elem.id == "blackKnight1" || elem.id == "blackKnight2")
+        {
+            knightLMove(parent.id);
+        }
     }
     else if (lastClicked != parent.id) {
         stopFlash();
         flashing.push(parent.id);
         lastClicked = parent.id;
+        // eventually want to handle different pieces
+        if(elem.id.includes("Knight"))
+        {
+            knightLMove(parent.id, elem.id);
+        }
+left off here; first get pieces to flash correctly, then handle flashing on occupied spots
+still need to add id and class to white pieces
     }
     else
     {
-    need to block all this out and then just do stop flash
-        //flashing.splice(index, 1);
-        if(parent.style.backgroundColor == "red")
-        {
-            if(parent.className === "square even")
-            {
-                parent.style.backgroundColor = "grey";
-            }
-            else
-            {
-                parent.style.backgroundColor = "white";
-            }
-        }
+        stopFlash();
+        lastClicked = 0;
     }
     // diagonalFlash(elem.id);
     //verticalFlash(elem.id);
     //horizontalFlash(elem.id);
-    knightLMove(parent.id);
 }
 
 function stopFlash()
@@ -49,10 +48,12 @@ function stopFlash()
     let i = 0;
     let flashingLength = flashing.length;
     let index = -1;
-    while(i < flashing.length)
+    alert("stop flash");
+    alert(flashing);
+    while(i < flashingLength)
     {
         index = flashing.pop();
-        elem = document.getElementById(flashing[index]);
+        elem = document.getElementById(index);
         // if blocks color is not red and it should be flashing, set it
         if(elem.style.backgroundColor == "red")
         {
@@ -62,11 +63,12 @@ function stopFlash()
             }
             else
             {
-                elem.style.backgroundColor = "GainsBoror";
+                elem.style.backgroundColor = "GainsBoro";
             }
         }
         i++;
     }
+    alert(flashing);
 }
 // function to manage making blocks switch colors
 function flash()
@@ -93,7 +95,7 @@ function flash()
             }
             else
             {
-                elem.style.backgroundColor = "GainsBoror";
+                elem.style.backgroundColor = "GainsBoro";
             }
         }
     }
