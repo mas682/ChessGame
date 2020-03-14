@@ -12,35 +12,50 @@ function setFlash(e, elem) {
     e.preventDefault();
     let parent = elem.parentNode;
     let index = flashing.indexOf(parent.id);
+    // if the square is not currently flashing and there are no squares currently
+    // flashing, and the last clicked is not this square
     if(index < 0 && flashing.length <= 0 && lastClicked != parent.id)
     {
-        flashing.push(parent.id);
         lastClicked = parent.id;
-        if(elem.id == "blackKnight1" || elem.id == "blackKnight2")
-        {
-            knightLMove(parent.id);
-        }
+        choosePiece(parent, elem);
     }
+    // if there are squares flashing and the clicked on square is not the most recent
     else if (lastClicked != parent.id) {
         stopFlash();
-        flashing.push(parent.id);
         lastClicked = parent.id;
-        // eventually want to handle different pieces
-        if(elem.id.includes("Knight"))
-        {
-            knightLMove(parent.id, elem.id);
-        }
-left off here; first get pieces to flash correctly, then handle flashing on occupied spots
-still need to add id and class to white pieces
+        choosePiece(parent, elem);
+//left off here; first get pieces to flash correctly, then handle flashing on occupied spots
+//still need to add id and class to white pieces
     }
+    // if clicked on the square that is flashing and was the last clicked on
     else
     {
         stopFlash();
         lastClicked = 0;
     }
-    // diagonalFlash(elem.id);
-    //verticalFlash(elem.id);
-    //horizontalFlash(elem.id);
+}
+
+function choosePiece(parent, elem)
+{
+    if(elem.id.includes("Knight"))
+    {
+        knightLMove(parent.id, elem.id);
+    }
+    else if(elem.id.includes("Rook")) {
+        verticalFlash(parent.id, elem.id);
+        horizontalFlash(parent.id, elem.id);
+    }
+    else if(elem.id.includes("Bishop"))
+    {
+        diagonalFlash(parent.id, elem.id);
+    }
+    else if(elem.id.includes("Queen"))
+    {
+        verticalFlash(parent.id, elem.id);
+        horizontalFlash(parent.id, elem.id);
+        diagonalFlash(parent.id, elem.id);
+    }
+
 }
 
 function stopFlash()
@@ -48,8 +63,6 @@ function stopFlash()
     let i = 0;
     let flashingLength = flashing.length;
     let index = -1;
-    alert("stop flash");
-    alert(flashing);
     while(i < flashingLength)
     {
         index = flashing.pop();
@@ -68,7 +81,6 @@ function stopFlash()
         }
         i++;
     }
-    alert(flashing);
 }
 // function to manage making blocks switch colors
 function flash()
@@ -76,7 +88,8 @@ function flash()
     // switch between true and false
     flip_color = !flip_color
 
-    let i = 0
+    let i = 0;
+    console.log(flashing);
     // go through each flashing block number
     for(i = 0; i < flashing.length; i++)
     {
@@ -102,7 +115,7 @@ function flash()
 }
 
 // function to handle getting diagonals
-function diagonalFlash(pos)
+function diagonalFlash(pos, piece)
 {
     pos = parseInt(pos);
     let p = pos;
@@ -157,14 +170,16 @@ function diagonalFlash(pos)
         p = p + 9;
     }
     squares_flashing.push(pos);
-    flashing = squares_flashing;
+    flashing = flashing.concat(squares_flashing);
+    // remove duplicates
+    flashing = flashing.filter( function( item, index, inputArray ) {
+           return inputArray.indexOf(item) == index;
+    });
     console.log(squares_flashing);
-    // have issue where you can change what is flashing without resetting squares that were flashing
-    // will want to unset all squares when calling setFlash
 }
 
 // function to get verticals
-function verticalFlash(pos)
+function verticalFlash(pos, piece)
 {
     pos = parseInt(pos);
     let p = pos;
@@ -187,7 +202,11 @@ function verticalFlash(pos)
         p = p + 8;
     }
     squares_flashing.push(pos);
-    flashing = squares_flashing;
+    flashing = flashing.concat(squares_flashing);
+    // remove duplicates
+    flashing = flashing.filter( function( item, index, inputArray ) {
+           return inputArray.indexOf(item) == index;
+    });
     console.log(squares_flashing);
 }
 
@@ -221,7 +240,11 @@ function horizontalFlash(pos)
         p = p + 1;
     }
     squares_flashing.push(pos);
-    flashing = squares_flashing;
+    flashing = flashing.concat(squares_flashing);
+    // remove duplicates
+    flashing = flashing.filter( function( item, index, inputArray ) {
+           return inputArray.indexOf(item) == index;
+    });
     console.log(squares_flashing);
 }
 
@@ -312,7 +335,11 @@ function knightLMove(pos)
         }
     }
     squares_flashing.push(pos);
-    flashing = squares_flashing;
+    flashing = flashing.concat(squares_flashing);
+    // remove duplicates
+    flashing = flashing.filter( function( item, index, inputArray ) {
+           return inputArray.indexOf(item) == index;
+    });
     console.log(squares_flashing);
 }
 
