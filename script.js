@@ -58,6 +58,10 @@ function choosePiece(parent, elem)
         horizontalFlash(parent.id, elem.id);
         diagonalFlash(parent.id, elem.id);
     }
+    else if(elem.id.includes("Pawn"))
+    {
+        pawnFlash(parent.id, elem.id);
+    }
 
 }
 
@@ -599,6 +603,64 @@ function knightLMove(pos, piece)
             else {
                 squares_flashing.push(p);
             }
+        }
+    }
+    squares_flashing.push(pos);
+    flashing = flashing.concat(squares_flashing);
+    // remove duplicates
+    flashing = flashing.filter( function( item, index, inputArray ) {
+           return inputArray.indexOf(item) == index;
+    });
+    console.log(squares_flashing);
+}
+
+
+// this needs more work
+// if opposite color right in front, should not be flashing
+// also check to see if opposite color at left or right position 1 square up/down
+function pawnFlash(pos, piece)
+{
+    pos = parseInt(pos);
+    let p = pos;
+    let color = "";
+    let squares_flashing = [];
+    let elementCheckResponse;
+
+    if(piece.startsWith("white"))
+    {
+        color = "white";
+    }
+    else
+    {
+        color = "black";
+    }
+
+    if(color == "white")
+    {
+        // for up
+        p = p - 8;
+        while(p >= (pos-16))
+        {
+            elementCheckResponse = elementCheck(p, color);
+            if(elementCheckResponse != null)
+            {
+                if(elementCheckResponse == "break")
+                {
+                    break;
+                }
+                else {
+                    squares_flashing.push(p);
+                    break;
+                }
+            }
+            // if here, no piece found on the square so add it to the flashing set
+            squares_flashing.push(p);
+            if(!(pos >= 48 && pos <= 55))
+            {
+                break;
+            }
+            // update value
+            p = p - 8;
         }
     }
     squares_flashing.push(pos);
