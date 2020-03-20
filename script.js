@@ -615,6 +615,54 @@ function knightLMove(pos, piece)
 }
 
 
+function elementCheckPawn(elemID)
+{
+    let elem = document.getElementById(String(elemID)).firstElementChild;
+    if(elem != null)
+    {
+        return "break";
+    }
+    else
+    {
+        return null;
+    }
+}
+
+
+function elementCheckPawnRightLeft(elemID, color)
+{
+    let elem = document.getElementById(String(elemID)).firstElementChild;
+    if(elem != null)
+    {
+        if(color == "black")
+        {
+            if(elem.id.startsWith("black"))
+            {
+                return null;
+            }
+            else
+            {
+                return "Add Square";
+            }
+        }
+        else
+        {
+            if(elem.id.startsWith("white"))
+            {
+                return null;
+            }
+            else
+            {
+                return "Add Square";
+            }
+        }
+    }
+    else
+    {
+        return null;
+    }
+}
+
 // this needs more work
 // if opposite color right in front, should not be flashing
 // also check to see if opposite color at left or right position 1 square up/down
@@ -625,6 +673,8 @@ function pawnFlash(pos, piece)
     let color = "";
     let squares_flashing = [];
     let elementCheckResponse;
+    let elemCheck2;
+    let row_pos = pos % 8;
 
     if(piece.startsWith("white"))
     {
@@ -638,29 +688,103 @@ function pawnFlash(pos, piece)
     if(color == "white")
     {
         // for up
+        var iteration = 1;
         p = p - 8;
-        while(p >= (pos-16))
+        while(p >= (pos-16) && p >= 0)
         {
-            elementCheckResponse = elementCheck(p, color);
-            if(elementCheckResponse != null)
+            elementCheckResponse = elementCheckPawn(p);
+            // check in front
+            if(elementCheckResponse == null)
             {
-                if(elementCheckResponse == "break")
+                // if here, no piece found on the square so add it to the flashing set
+                squares_flashing.push(p);
+            }
+            if(iteration == 1)
+            {
+                let square;
+                // if not at furthest right position
+                if(row_pos != 7)
                 {
-                    break;
+                    square = pos - 7;
+                    elemCheck2 = elementCheckPawnRightLeft(square, color);
+                    // check in front
+                    if(elemCheck2 != null)
+                    {
+                        // if here, no piece found on the square so add it to the flashing set
+                        squares_flashing.push(square);
+                    }
                 }
-                else {
-                    squares_flashing.push(p);
-                    break;
+                // if not at furthest left position
+                if(row_pos != 0)
+                {
+                    square = pos - 9;
+                    elemCheck2 = elementCheckPawnRightLeft(square, color);
+                    // check in front
+                    if(elemCheck2 != null)
+                    {
+                        // if here, no piece found on the square so add it to the flashing set
+                        squares_flashing.push(square);
+                    }
                 }
             }
-            // if here, no piece found on the square so add it to the flashing set
-            squares_flashing.push(p);
-            if(!(pos >= 48 && pos <= 55))
+            if(!(pos >= 48 && pos <= 55) || elementCheckResponse != null)
             {
                 break;
             }
             // update value
             p = p - 8;
+            iteration ++;
+        }
+    }
+    else
+    {
+        // for up
+        var iteration = 1;
+        p = p + 8;
+        while(p <= (pos+16) && p <= 63)
+        {
+            elementCheckResponse = elementCheckPawn(p);
+            // check in front
+            if(elementCheckResponse == null)
+            {
+                // if here, no piece found on the square so add it to the flashing set
+                squares_flashing.push(p);
+            }
+            if(iteration == 1)
+            {
+                let square;
+                // if not at furthest right position
+                if(row_pos != 7)
+                {
+                    square = pos + 9;
+                    elemCheck2 = elementCheckPawnRightLeft(square, color);
+                    // check in front
+                    if(elemCheck2 != null)
+                    {
+                        // if here, no piece found on the square so add it to the flashing set
+                        squares_flashing.push(square);
+                    }
+                }
+                // if not at furthest left position
+                if(row_pos != 0)
+                {
+                    square = pos + 7;
+                    elemCheck2 = elementCheckPawnRightLeft(square, color);
+                    // check in front
+                    if(elemCheck2 != null)
+                    {
+                        // if here, no piece found on the square so add it to the flashing set
+                        squares_flashing.push(square);
+                    }
+                }
+            }
+            if(!(pos >= 8 && pos <= 15) || elementCheckResponse != null)
+            {
+                break;
+            }
+            // update value
+            p = p + 8;
+            iteration ++;
         }
     }
     squares_flashing.push(pos);
