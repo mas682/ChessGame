@@ -1,6 +1,9 @@
 
 // holds which blocks have currently been clicked on
 let flashing = []
+//let whitePieces = [58, 59, 60, 61, 62, 63]
+//let blackPieces = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+
 // used to synchronzie block color change
 let flip_color = false
 let lastClicked = 0
@@ -114,17 +117,79 @@ function flash()
     }
 }
 
+
+// this function is still being worked on
+// go to lines 207
+function elementCheck(elemID, color)
+{
+    let elem = document.getElementById(String(elemID)).firstElementChild;
+    if(elem != null)
+    {
+        if(color == "black")
+        {
+            if(elem.id.startsWith("black"))
+            {
+                return "break";
+            }
+            else
+            {
+                //squares_flashing.push(elemID);
+                return "Add Square";
+            }
+        }
+        else
+        {
+            if(elem.id.startsWith("white"))
+            {
+                return "break";
+            }
+            else
+            {
+                return "Add Square";
+            }
+        }
+    }
+    else
+    {
+        return null;
+    }
+}
+
+
 // function to handle getting diagonals
 function diagonalFlash(pos, piece)
 {
     pos = parseInt(pos);
     let p = pos;
+    let color = "";
     let squares_flashing = [];
     let previous_pos = pos % 8;
+    var elementCheckResponse;
+
+    if(piece.startsWith("white"))
+    {
+        color = "white";
+    }
+    else
+    {
+        color = "black";
+    }
     // for up, left
     p = p - 9;
     while(p >= 0 && previous_pos != 0)
     {
+        elementCheckResponse = elementCheck(p, color);
+        if(elementCheckResponse != null)
+        {
+            if(elementCheckResponse == "break")
+            {
+                break;
+            }
+            else {
+                squares_flashing.push(p);
+                break;
+            }
+        }
         squares_flashing.push(p);
         // get position within row
         previous_pos = p % 8;
@@ -138,6 +203,18 @@ function diagonalFlash(pos, piece)
     p = p - 7;
     while(p >= 0 && previous_pos != 7)
     {
+        elementCheckResponse = elementCheck(p, color);
+        if(elementCheckResponse != null)
+        {
+            if(elementCheckResponse == "break")
+            {
+                break;
+            }
+            else {
+                squares_flashing.push(p);
+                break;
+            }
+        }
         squares_flashing.push(p);
         // get position within row
         previous_pos = p % 8;
@@ -150,6 +227,19 @@ function diagonalFlash(pos, piece)
     p = p + 7;
     while(p < 64 && previous_pos != 0)
     {
+        elementCheckResponse = elementCheck(p, color);
+        if(elementCheckResponse != null)
+        {
+            if(elementCheckResponse == "break")
+            {
+                break;
+            }
+            else {
+                squares_flashing.push(p);
+                break;
+            }
+        }
+        // if here, no piece found on the square so add it to the flashing set
         squares_flashing.push(p);
         // get position within row
         previous_pos = p % 8;
@@ -163,6 +253,18 @@ function diagonalFlash(pos, piece)
     p = p + 9;
     while(p < 64 && previous_pos != 7)
     {
+        elementCheckResponse = elementCheck(p, color);
+        if(elementCheckResponse != null)
+        {
+            if(elementCheckResponse == "break")
+            {
+                break;
+            }
+            else {
+                squares_flashing.push(p);
+                break;
+            }
+        }
         squares_flashing.push(p);
         // get position within row
         previous_pos = p % 8;
@@ -183,11 +285,35 @@ function verticalFlash(pos, piece)
 {
     pos = parseInt(pos);
     let p = pos;
+    let color = "";
     let squares_flashing = [];
+    var elementCheckResponse;
+
+    if(piece.startsWith("white"))
+    {
+        color = "white";
+    }
+    else
+    {
+        color = "black";
+    }
     // for up
     p = p - 8;
     while(p >= 0)
     {
+        elementCheckResponse = elementCheck(p, color);
+        if(elementCheckResponse != null)
+        {
+            if(elementCheckResponse == "break")
+            {
+                break;
+            }
+            else {
+                squares_flashing.push(p);
+                break;
+            }
+        }
+        // if here, no piece found on the square so add it to the flashing set
         squares_flashing.push(p);
         // update value
         p = p - 8;
@@ -197,6 +323,19 @@ function verticalFlash(pos, piece)
     p = p + 8;
     while(p < 64)
     {
+        elementCheckResponse = elementCheck(p, color);
+        if(elementCheckResponse != null)
+        {
+            if(elementCheckResponse == "break")
+            {
+                break;
+            }
+            else {
+                squares_flashing.push(p);
+                break;
+            }
+        }
+        // if here, no piece found on the square so add it to the flashing set
         squares_flashing.push(p);
         // update value
         p = p + 8;
@@ -211,16 +350,40 @@ function verticalFlash(pos, piece)
 }
 
 // function to get horizontals
-function horizontalFlash(pos)
+function horizontalFlash(pos, piece)
 {
     pos = parseInt(pos);
     let p = pos;
+    let color = "";
     let squares_flashing = [];
     let previous_pos = pos % 8;
+    var elementCheckResponse;
+
+    if(piece.startsWith("white"))
+    {
+        color = "white";
+    }
+    else
+    {
+        color = "black";
+    }
     // for left
     p = p - 1;
     while(previous_pos != 0)
     {
+        elementCheckResponse = elementCheck(p, color);
+        if(elementCheckResponse != null)
+        {
+            if(elementCheckResponse == "break")
+            {
+                break;
+            }
+            else {
+                squares_flashing.push(p);
+                break;
+            }
+        }
+        // if here, no piece found on the square so add it to the flashing set
         squares_flashing.push(p);
         // get position within row
         previous_pos = p % 8;
@@ -234,6 +397,19 @@ function horizontalFlash(pos)
     p = p + 1;
     while(previous_pos != 7)
     {
+        elementCheckResponse = elementCheck(p, color);
+        if(elementCheckResponse != null)
+        {
+            if(elementCheckResponse == "break")
+            {
+                break;
+            }
+            else {
+                squares_flashing.push(p);
+                break;
+            }
+        }
+        // if here, no piece found on the square so add it to the flashing set
         squares_flashing.push(p);
         // get position within row
         previous_pos = p % 8;
@@ -248,12 +424,23 @@ function horizontalFlash(pos)
     console.log(squares_flashing);
 }
 
-function knightLMove(pos)
+function knightLMove(pos, piece)
 {
     pos = parseInt(pos);
     let p = pos;
+    let color = "";
     let squares_flashing = [];
     let row_pos = pos % 8;
+    let elementCheckResponse;
+
+    if(piece.startsWith("white"))
+    {
+        color = "white";
+    }
+    else
+    {
+        color = "black";
+    }
     // for two up, one left
     // if alread at left most column, skip
     if(row_pos > 0)
@@ -261,7 +448,17 @@ function knightLMove(pos)
         p = p - 17;
         if(p >= 0)
         {
-            squares_flashing.push(p);
+            elementCheckResponse = elementCheck(p, color);
+            if(elementCheckResponse != null)
+            {
+                if(elementCheckResponse != "break")
+                {
+                    squares_flashing.push(p);
+                }
+            }
+            else {
+                squares_flashing.push(p);
+            }
         }
     }
     // one up, two left
@@ -271,7 +468,17 @@ function knightLMove(pos)
         p = p - 10;
         if(p >= 0)
         {
-            squares_flashing.push(p);
+            elementCheckResponse = elementCheck(p, color);
+            if(elementCheckResponse != null)
+            {
+                if(elementCheckResponse != "break")
+                {
+                    squares_flashing.push(p);
+                }
+            }
+            else {
+                squares_flashing.push(p);
+            }
         }
     }
     // two up, one right
@@ -281,7 +488,17 @@ function knightLMove(pos)
         p = p - 15;
         if(p >= 0)
         {
-            squares_flashing.push(p);
+            elementCheckResponse = elementCheck(p, color);
+            if(elementCheckResponse != null)
+            {
+                if(elementCheckResponse != "break")
+                {
+                    squares_flashing.push(p);
+                }
+            }
+            else {
+                squares_flashing.push(p);
+            }
         }
     }
     // one up, two right
@@ -291,7 +508,17 @@ function knightLMove(pos)
         p = p - 6;
         if(p >= 0)
         {
-            squares_flashing.push(p);
+            elementCheckResponse = elementCheck(p, color);
+            if(elementCheckResponse != null)
+            {
+                if(elementCheckResponse != "break")
+                {
+                    squares_flashing.push(p);
+                }
+            }
+            else {
+                squares_flashing.push(p);
+            }
         }
     }
     // two down, one right
@@ -301,7 +528,17 @@ function knightLMove(pos)
         p = p + 17;
         if(p < 64)
         {
-            squares_flashing.push(p);
+            elementCheckResponse = elementCheck(p, color);
+            if(elementCheckResponse != null)
+            {
+                if(elementCheckResponse != "break")
+                {
+                    squares_flashing.push(p);
+                }
+            }
+            else {
+                squares_flashing.push(p);
+            }
         }
     }
     // one down, two right
@@ -311,7 +548,17 @@ function knightLMove(pos)
         p = p + 10;
         if(p < 64)
         {
-            squares_flashing.push(p);
+            elementCheckResponse = elementCheck(p, color);
+            if(elementCheckResponse != null)
+            {
+                if(elementCheckResponse != "break")
+                {
+                    squares_flashing.push(p);
+                }
+            }
+            else {
+                squares_flashing.push(p);
+            }
         }
     }
     // one down, two left
@@ -321,7 +568,17 @@ function knightLMove(pos)
         p = p + 6;
         if(p < 64)
         {
-            squares_flashing.push(p);
+            elementCheckResponse = elementCheck(p, color);
+            if(elementCheckResponse != null)
+            {
+                if(elementCheckResponse != "break")
+                {
+                    squares_flashing.push(p);
+                }
+            }
+            else {
+                squares_flashing.push(p);
+            }
         }
     }
     // two, one left
@@ -331,7 +588,17 @@ function knightLMove(pos)
         p = p + 15;
         if(p < 64)
         {
-            squares_flashing.push(p);
+            elementCheckResponse = elementCheck(p, color);
+            if(elementCheckResponse != null)
+            {
+                if(elementCheckResponse != "break")
+                {
+                    squares_flashing.push(p);
+                }
+            }
+            else {
+                squares_flashing.push(p);
+            }
         }
     }
     squares_flashing.push(pos);
