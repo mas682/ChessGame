@@ -24,9 +24,27 @@ function setFlash(e, elem) {
     }
     // if there are squares flashing and the clicked on square is not the most recent
     else if (lastClicked != parent.id) {
-        stopFlash();
-        lastClicked = parent.id;
-        choosePiece(parent, elem);
+        // if here, on a piece, so check if it was one of the current flashing pieces
+        if(flashing.includes(parseInt(parent.id)))
+        {
+            stopFlash();
+            // need to remove the current piece
+            let replacementElem = document.getElementById(String(lastClicked));
+            let pieceElem = replacementElem.innerHTML;
+            parent.innerHTML = String(pieceElem);
+            replacementElem.innerHTML = "";
+            lastClicked = -1;
+// need to update moving to empty squares
+// will need a event listener on each square
+// then on click, check to make sure it is in the flashing set
+// otherwise, simply do nothing
+        }
+        else
+        {
+            stopFlash();
+            lastClicked = parent.id;
+            choosePiece(parent, elem);
+        }
 //left off here; first get pieces to flash correctly, then handle flashing on occupied spots
 //still need to add id and class to white pieces
     }
@@ -663,7 +681,6 @@ function elementCheckPawnRightLeft(elemID, color)
     }
 }
 
-// this needs more work
 // if opposite color right in front, should not be flashing
 // also check to see if opposite color at left or right position 1 square up/down
 function pawnFlash(pos, piece)
@@ -738,7 +755,6 @@ function pawnFlash(pos, piece)
     }
     else
     {
-        // for up
         var iteration = 1;
         p = p + 8;
         while(p <= (pos+16) && p <= 63)
