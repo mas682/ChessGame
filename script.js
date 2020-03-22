@@ -153,6 +153,12 @@ function flash()
     for(i = 0; i < flashing.length; i++)
     {
         elem = document.getElementById(flashing[i]);
+        // set the square the was clicked on to a single color, not flashing
+        if(flashing[i] == lastClicked)
+        {
+            elem.style.backgroundColor = "red";
+            continue;
+        }
         // if blocks color is not red and it should be flashing, set it
         if(elem.style.backgroundColor !== "red" && flip_color)
         {
@@ -173,9 +179,8 @@ function flash()
     }
 }
 
-
-// this function is still being worked on
-// go to lines 207
+// this function checks to see if there is a square is avaiable for a piece
+// to land on
 function elementCheck(elemID, color)
 {
     let elem = document.getElementById(String(elemID)).firstElementChild;
@@ -189,7 +194,6 @@ function elementCheck(elemID, color)
             }
             else
             {
-                //squares_flashing.push(elemID);
                 return "Add Square";
             }
         }
@@ -339,6 +343,7 @@ function diagonalFlash(pos, piece)
 // function to get verticals
 function verticalFlash(pos, piece)
 {
+    // the square the piece is currently on
     pos = parseInt(pos);
     let p = pos;
     let color = "";
@@ -846,6 +851,597 @@ function pawnFlash(pos, piece)
     console.log(squares_flashing);
 }
 
+// this function will check if a piece is moved to a certain spot,
+// will it leave the king vulnerable
+// returns true if the king is vulnerable, false otherwise
+function kingVulnerable(pos, color, nextPos)
+{
+    let kingElem;
+    let kignSquare;
+    if(color == "white")
+    {
+        kingElem = document.getElementById("whiteKing");
+    }
+    else
+    {
+        kingElem = document.getElementById("blackKing");
+    }
+    kingSquare = kingElem.parentNode;
+    let vertCheck = verticalCheck(kingSquare.id, color, 0, 1);
+    alert("King in danger vertically: " + vertCheck);
+    let horizCheck = horizontalCheck(kingSquare.id, color, 0, 1);
+    alert("King in danger horizontally: " + horizCheck);
+    let diagCheck = diagonalCheck(kingSquare.id, color, 0, 1);
+    alert("King in danger diagonally: " + diagCheck);
+    let knightValid = knightCheck(kingSquare.id, color, 0, 1);
+    alert("King in danger from knight: " + knightValid);
+
+    // left off here:
+    // checks to see if the king is in danger should be done
+    // need to add this part to setting which squares to set to flashing by passing in
+    // the current piece position and where it could potentially be moving to
+    // this method should return t/f
+    // will be called when adding the values to the squares_flashing arrays
+    // if returns true, break out of the loops/don't add square to flashing set
+}
+
+
+// function to see if any enemy piece is within reach of the king vertically
+function verticalCheck(pos, color, oldPiecePos, newPiecePos)
+{
+    // the square the king is currently on
+    pos = parseInt(pos);
+    let p = pos;
+    var elementCheckResponse;
+
+    p = p - 8;
+    while(p >= 0)
+    {
+        // if at old piece, assume the square will be empty
+        if(p == parseInt(oldPiecePos))
+        {
+            p = p - 8;
+            continue;
+        }
+        // if you get to where the new piece will be, it there is something
+        // blocking the king
+        if(p == parseInt(newPiecePos))
+        {
+            break;
+        }
+        // see what piece is on the current square to check
+        elementCheckResponse = elementCheck(p, color);
+        // if not null, a piece was found on the square
+        if(elementCheckResponse != null)
+        {
+            // if the piece is not a fiendly piece
+            if(elementCheckResponse != "break")
+            {
+                // need to see if the piece can access the king
+                let enemyElem = document.getElementById(String(p));
+                // get the piece
+                let enemyPiece = enemyElem.firstElementChild;
+                if(enemyPiece.className == "queen" || enemyPiece.className == "rook")
+                {
+                    return true;
+                }
+            }
+            break;
+        }
+        // update value
+        p = p - 8;
+    }
+    // for down
+    p = pos;
+    p = p + 8;
+    while(p < 64)
+    {
+        // if at old piece, assume the square will be empty
+        if(p == parseInt(oldPiecePos))
+        {
+            p = p + 8;
+            continue;
+        }
+        // if you get to where the new piece will be, it there is something
+        // blocking the king
+        if(p == parseInt(newPiecePos))
+        {
+            break;
+        }
+        // see what piece is on the current square to check
+        elementCheckResponse = elementCheck(p, color);
+        // if not null, a piece was found on the square
+        if(elementCheckResponse != null)
+        {
+            // if the piece is not friendly
+            if(elementCheckResponse != "break")
+            {
+                // need to see if the piece can access the king
+                let enemyElem = document.getElementById(String(p));
+                // get the piece
+                let enemyPiece = enemyElem.firstElementChild;
+                if(enemyPiece.className == "queen" || enemyPiece.className == "rook")
+                {
+                    return true;
+                }
+            }
+            break;
+        }
+        p = p + 8;
+    }
+    return false;
+}
+
+// function to see if any enemy piece is within reach of the king horizontally
+// pos is the current square number the king is on
+// color is the color of the king
+// oldPiecePos is where the current piece to be moved is
+// newPiecePos is where the current piece to be moved may be moved
+function horizontalCheck(pos, color, oldPiecePos, newPiecePos)
+{
+    pos = parseInt(pos);
+    let p = pos;
+    let previous_pos = pos % 8;
+    var elementCheckResponse;
+
+    // for left
+    p = p - 1;
+    while(previous_pos != 0)
+    {
+        elementCheckResponse = elementCheck(p, color);
+        if(elementCheckResponse != null)
+        {
+            // if the piece is not friendly
+            if(elementCheckResponse != "break")
+            {
+                // need to see if the piece can access the king
+                let enemyElem = document.getElementById(String(p));
+                // get the piece
+                let enemyPiece = enemyElem.firstElementChild;
+                if(enemyPiece.className == "queen" || enemyPiece.className == "rook")
+                {
+                    return true;
+                }
+            }
+            break;
+        }
+        // get position within row
+        previous_pos = p % 8;
+        // update value
+        p = p - 1;
+    }
+    // reset values
+    // for right
+    p = pos;
+    previous_pos = pos % 8;
+    p = p + 1;
+    while(previous_pos != 7)
+    {
+        elementCheckResponse = elementCheck(p, color);
+        // if there is a piece on the square
+        if(elementCheckResponse != null)
+        {
+            // if the piece is not friendly
+            if(elementCheckResponse == "break")
+            {
+                // need to see if the piece can access the king
+                let enemyElem = document.getElementById(String(p));
+                // get the piece
+                let enemyPiece = enemyElem.firstElementChild;
+                if(enemyPiece.className == "queen" || enemyPiece.className == "rook")
+                {
+                    return true;
+                }
+            }
+            break;
+        }
+        // get position within row
+        previous_pos = p % 8;
+        p = p + 1;
+    }
+    return false;
+}
+
+// function to see if any enemy piece is within reach of the king diagonally
+// pos is the current square number the king is on
+// color is the color of the king
+// oldPiecePos is where the current piece to be moved is
+// newPiecePos is where the current piece to be moved may be moved
+function diagonalCheck(pos, color, oldPiecePos, newPiecePos)
+{
+    pos = parseInt(pos);
+    let p = pos;
+    let previous_pos = pos % 8;
+    var elementCheckResponse;
+
+    // for up, left
+    p = p - 9;
+    while(p >= 0 && previous_pos != 0)
+    {
+        elementCheckResponse = elementCheck(p, color);
+        // if there is a piece on the square
+        if(elementCheckResponse != null)
+        {
+            // if the piece is not friendly
+            if(elementCheckResponse != "break")
+            {
+                // need to see if the piece can access the king
+                let enemyElem = document.getElementById(String(p));
+                // get the piece
+                let enemyPiece = enemyElem.firstElementChild;
+                if(enemyPiece.className == "queen" || enemyPiece.className == "bishop")
+                {
+                    return true;
+                }
+                // check if the piece is a pawn
+                // could have issue if the pawn is coming down the opposite way if it were to turn around
+                // could keep track of pawns going the opposite direction in an array?
+                if(color == "white")
+                {
+                    if(p == (pos - 9))
+                    {
+                        if(enemyPiece.className == "pawn")
+                        {
+                            return true;
+                        }
+                    }
+                }
+                break;
+            }
+        }
+        // get position within row
+        previous_pos = p % 8;
+        // update value
+        p = p - 9;
+    }
+    // reset values
+    // for up, right
+    p = pos;
+    previous_pos = pos % 8;
+    p = p - 7;
+    while(p >= 0 && previous_pos != 7)
+    {
+        elementCheckResponse = elementCheck(p, color);
+        // if the there is a piece on the square
+        if(elementCheckResponse != null)
+        {
+            // if the piece is not friendly
+            if(elementCheckResponse != "break")
+            {
+                // need to see if the piece can access the king
+                let enemyElem = document.getElementById(String(p));
+                // get the piece
+                let enemyPiece = enemyElem.firstElementChild;
+                if(enemyPiece.className == "queen" || enemyPiece.className == "bishop")
+                {
+                    return true;
+                }
+                // check if the piece is a pawn
+                if(color == "white")
+                {
+                    if(p == (pos - 7))
+                    {
+                        if(enemyPiece.className == "pawn")
+                        {
+                            return true;
+                        }
+                    }
+                }
+                break;
+            }
+        }
+        // get position within row
+        previous_pos = p % 8;
+        p = p - 7;
+    }
+    // reset values
+    // for down, left
+    p = pos;
+    previous_pos = pos % 8;
+    p = p + 7;
+    while(p < 64 && previous_pos != 0)
+    {
+        elementCheckResponse = elementCheck(p, color);
+        // if there is a piece on the square
+        if(elementCheckResponse != null)
+        {
+            // if the piece is not friendly
+            if(elementCheckResponse != "break")
+            {
+                // need to see if the piece can access the king
+                let enemyElem = document.getElementById(String(p));
+                // get the piece
+                let enemyPiece = enemyElem.firstElementChild;
+                if(enemyPiece.className == "queen" || enemyPiece.className == "bishop")
+                {
+                    return true;
+                }
+                // check if the piece is a pawn
+                if(color == "black")
+                {
+                    if(p == (pos + 7))
+                    {
+                        if(enemyPiece.className == "pawn")
+                        {
+                            return true;
+                        }
+                    }
+                }
+                break;
+            }
+        }
+        // get position within row
+        previous_pos = p % 8;
+        // update value
+        p = p + 7;
+    }
+    // reset values
+    // for down, right
+    p = pos;
+    previous_pos = pos % 8;
+    p = p + 9;
+    while(p < 64 && previous_pos != 7)
+    {
+        elementCheckResponse = elementCheck(p, color);
+        // if there is a piece on the square
+        if(elementCheckResponse != null)
+        {
+            // if the piece is not friendly
+            if(elementCheckResponse != "break")
+            {
+                // need to see if the piece can access the king
+                let enemyElem = document.getElementById(String(p));
+                // get the piece
+                let enemyPiece = enemyElem.firstElementChild;
+                if(enemyPiece.className == "queen" || enemyPiece.className == "bishop")
+                {
+                    return true;
+                }
+                // check if the piece is a pawn
+                if(color == "black")
+                {
+                    if(p == (pos + 9))
+                    {
+                        if(enemyPiece.className == "pawn")
+                        {
+                            return true;
+                        }
+                    }
+                }
+                break;
+            }
+        }
+        // get position within row
+        previous_pos = p % 8;
+        // update value
+        p = p + 9;
+    }
+    return false;
+}
+
+
+// function to see if any enemy piece is within reach of the king within the knights move
+// pos is the current square number the king is on
+// color is the color of the king
+// oldPiecePos is where the current piece to be moved is
+// newPiecePos is where the current piece to be moved may be moved
+function knightCheck(pos, color, oldPiecePos, newPiecePos)
+{
+    pos = parseInt(pos);
+    let p = pos;
+    let row_pos = pos % 8;
+    let elementCheckResponse;
+
+    // for two up, one left
+    // if alread at left most column, skip
+    if(row_pos > 0)
+    {
+        p = p - 17;
+        if(p >= 0)
+        {
+            elementCheckResponse = elementCheck(p, color);
+            // if there is a piece on the square
+            if(elementCheckResponse != null)
+            {
+                // if the piece is not friendly
+                if(elementCheckResponse != "break")
+                {
+                    // need to see if the piece can access the king
+                    let enemyElem = document.getElementById(String(p));
+                    // get the piece
+                    let enemyPiece = enemyElem.firstElementChild;
+                    if(enemyPiece.className == "knight")
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+    }
+    // one up, two left
+    p = pos;
+    if(row_pos > 1)
+    {
+        p = p - 10;
+        if(p >= 0)
+        {
+            elementCheckResponse = elementCheck(p, color);
+            // if there is a piece on the square
+            if(elementCheckResponse != null)
+            {
+                // if the piece is not friendly
+                if(elementCheckResponse != "break")
+                {
+                    // need to see if the piece can access the king
+                    let enemyElem = document.getElementById(String(p));
+                    // get the piece
+                    let enemyPiece = enemyElem.firstElementChild;
+                    if(enemyPiece.className == "knight")
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+    }
+    // two up, one right
+    p = pos;
+    if(row_pos < 7)
+    {
+        p = p - 15;
+        if(p >= 0)
+        {
+            elementCheckResponse = elementCheck(p, color);
+            // if there is a piece on the square
+            if(elementCheckResponse != null)
+            {
+                // if the piece is not friendly
+                if(elementCheckResponse != "break")
+                {
+                    // need to see if the piece can access the king
+                    let enemyElem = document.getElementById(String(p));
+                    // get the piece
+                    let enemyPiece = enemyElem.firstElementChild;
+                    if(enemyPiece.className == "knight")
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+    }
+    // one up, two right
+    p = pos;
+    if(row_pos < 6)
+    {
+        p = p - 6;
+        if(p >= 0)
+        {
+            elementCheckResponse = elementCheck(p, color);
+            // if there is a piece on the square
+            if(elementCheckResponse != null)
+            {
+                // if the piece is not friendly
+                if(elementCheckResponse != "break")
+                {
+                    // need to see if the piece can access the king
+                    let enemyElem = document.getElementById(String(p));
+                    // get the piece
+                    let enemyPiece = enemyElem.firstElementChild;
+                    if(enemyPiece.className == "knight")
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+    }
+    // two down, one right
+    p = pos;
+    if(row_pos < 7)
+    {
+        p = p + 17;
+        if(p < 64)
+        {
+            elementCheckResponse = elementCheck(p, color);
+            // if there is a piece on the square
+            if(elementCheckResponse != null)
+            {
+                // if the piece is not frienly
+                if(elementCheckResponse != "break")
+                {
+                    // need to see if the piece can access the king
+                    let enemyElem = document.getElementById(String(p));
+                    // get the piece
+                    let enemyPiece = enemyElem.firstElementChild;
+                    if(enemyPiece.className == "knight")
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+    }
+    // one down, two right
+    p = pos;
+    if(row_pos < 6)
+    {
+        p = p + 10;
+        if(p < 64)
+        {
+            elementCheckResponse = elementCheck(p, color);
+            // if there is a piece on the square
+            if(elementCheckResponse != null)
+            {
+                // if the piece is not friendly
+                if(elementCheckResponse != "break")
+                {
+                    // need to see if the piece can access the king
+                    let enemyElem = document.getElementById(String(p));
+                    // get the piece
+                    let enemyPiece = enemyElem.firstElementChild;
+                    if(enemyPiece.className == "knight")
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+    }
+    // one down, two left
+    p = pos;
+    if(row_pos > 1)
+    {
+        p = p + 6;
+        if(p < 64)
+        {
+            elementCheckResponse = elementCheck(p, color);
+            // if there is a piece on the square
+            if(elementCheckResponse != null)
+            {
+                // if the piece is not friendly
+                if(elementCheckResponse != "break")
+                {
+                    // need to see if the piece can access the king
+                    let enemyElem = document.getElementById(String(p));
+                    // get the piece
+                    let enemyPiece = enemyElem.firstElementChild;
+                    if(enemyPiece.className == "knight")
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+    }
+    // two, one left
+    p = pos;
+    if(row_pos > 0)
+    {
+        p = p + 15;
+        if(p < 64)
+        {
+            elementCheckResponse = elementCheck(p, color);
+            // if there is a piece on the square
+            if(elementCheckResponse != null)
+            {
+                // if the piece is not friendly
+                if(elementCheckResponse != "break")
+                {
+                    // need to see if the piece can access the king
+                    let enemyElem = document.getElementById(String(p));
+                    // get the piece
+                    let enemyPiece = enemyElem.firstElementChild;
+                    if(enemyPiece.className == "knight")
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+    }
+    return false;
+}
 
 // get all the blocks
 //elems = document.querySelectorAll(".square");
@@ -867,5 +1463,6 @@ for(i = 0; i < squareElems.length; i++)
     squareElems[i].addEventListener('click', function(e){ moveToEmptySquare(e, this); }, false);
 }
 
-
+// for testing
+kingVulnerable(0, "white", 5)
 setInterval(flash, 1000);
