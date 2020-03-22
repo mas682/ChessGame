@@ -56,6 +56,7 @@ function setFlash(e, elem) {
     // flashing, and the last clicked is not this square
     if(index < 0 && flashing.length <= 0 && lastClicked != parent.id)
     {
+        setSelectedSquareColor(parent.id);
         lastClicked = parent.id;
         choosePiece(parent, elem);
         firstClick = true;
@@ -77,6 +78,7 @@ function setFlash(e, elem) {
         else
         {
             stopFlash();
+            setSelectedSquareColor(parent.id);
             lastClicked = parent.id;
             choosePiece(parent, elem);
             firstClick = true;
@@ -141,6 +143,14 @@ function stopFlash()
         i++;
     }
 }
+
+// used to set the clicked on squares color faster
+function setSelectedSquareColor(index)
+{
+    elem = document.getElementById(index);
+    elem.style.backgroundColor = "red";
+}
+
 // function to manage making blocks switch colors
 function flash()
 {
@@ -224,7 +234,8 @@ function diagonalFlash(pos, piece)
     let color = "";
     let squares_flashing = [];
     let previous_pos = pos % 8;
-    var elementCheckResponse;
+    let elementCheckResponse;
+    let kingCheck;
 
     if(piece.startsWith("white"))
     {
@@ -246,11 +257,23 @@ function diagonalFlash(pos, piece)
                 break;
             }
             else {
-                squares_flashing.push(p);
+                kingCheck = kingVulnerable(pos, color, p)
+                if(!kingCheck)
+                {
+                    squares_flashing.push(p);
+                }
                 break;
             }
         }
-        squares_flashing.push(p);
+        kingCheck = kingVulnerable(pos, color, p)
+        if(!kingCheck)
+        {
+            squares_flashing.push(p);
+        }
+        else
+        {
+            break;
+        }
         // get position within row
         previous_pos = p % 8;
         // update value
@@ -271,11 +294,23 @@ function diagonalFlash(pos, piece)
                 break;
             }
             else {
-                squares_flashing.push(p);
+                kingCheck = kingVulnerable(pos, color, p)
+                if(!kingCheck)
+                {
+                    squares_flashing.push(p);
+                }
                 break;
             }
         }
-        squares_flashing.push(p);
+        kingCheck = kingVulnerable(pos, color, p)
+        if(!kingCheck)
+        {
+            squares_flashing.push(p);
+        }
+        else
+        {
+            break;
+        }
         // get position within row
         previous_pos = p % 8;
         p = p - 7;
@@ -295,12 +330,24 @@ function diagonalFlash(pos, piece)
                 break;
             }
             else {
-                squares_flashing.push(p);
+                kingCheck = kingVulnerable(pos, color, p);
+                if(!kingCheck)
+                {
+                    squares_flashing.push(p);
+                }
                 break;
             }
         }
         // if here, no piece found on the square so add it to the flashing set
-        squares_flashing.push(p);
+        kingCheck = kingVulnerable(pos, color, p)
+        if(!kingCheck)
+        {
+            squares_flashing.push(p);
+        }
+        else
+        {
+            break;
+        }
         // get position within row
         previous_pos = p % 8;
         // update value
@@ -321,11 +368,23 @@ function diagonalFlash(pos, piece)
                 break;
             }
             else {
-                squares_flashing.push(p);
+                kingCheck = kingVulnerable(pos, color, p)
+                if(!kingCheck)
+                {
+                    squares_flashing.push(p);
+                }
                 break;
             }
         }
-        squares_flashing.push(p);
+        kingCheck = kingVulnerable(pos, color, p)
+        if(!kingCheck)
+        {
+            squares_flashing.push(p);
+        }
+        else
+        {
+            break;
+        }
         // get position within row
         previous_pos = p % 8;
         // update value
@@ -348,7 +407,8 @@ function verticalFlash(pos, piece)
     let p = pos;
     let color = "";
     let squares_flashing = [];
-    var elementCheckResponse;
+    let elementCheckResponse;
+    let kingCheck;
 
     if(piece.startsWith("white"))
     {
@@ -370,12 +430,24 @@ function verticalFlash(pos, piece)
                 break;
             }
             else {
-                squares_flashing.push(p);
+                kingCheck = kingVulnerable(pos, color, p)
+                if(!kingCheck)
+                {
+                    squares_flashing.push(p);
+                }
                 break;
             }
         }
         // if here, no piece found on the square so add it to the flashing set
-        squares_flashing.push(p);
+        kingCheck = kingVulnerable(pos, color, p);
+        if(!kingCheck)
+        {
+            squares_flashing.push(p);
+        }
+        else
+        {
+            break;
+        }
         // update value
         p = p - 8;
     }
@@ -392,12 +464,24 @@ function verticalFlash(pos, piece)
                 break;
             }
             else {
-                squares_flashing.push(p);
+                kingCheck = kingVulnerable(pos, color, p)
+                if(!kingCheck)
+                {
+                    squares_flashing.push(p);
+                }
                 break;
             }
         }
         // if here, no piece found on the square so add it to the flashing set
-        squares_flashing.push(p);
+        kingCheck = kingVulnerable(pos, color, p)
+        if(!kingCheck)
+        {
+            squares_flashing.push(p);
+        }
+        else
+        {
+            break;
+        }
         // update value
         p = p + 8;
     }
@@ -418,7 +502,8 @@ function horizontalFlash(pos, piece)
     let color = "";
     let squares_flashing = [];
     let previous_pos = pos % 8;
-    var elementCheckResponse;
+    let elementCheckResponse;
+    let kingCheck;
 
     if(piece.startsWith("white"))
     {
@@ -440,12 +525,24 @@ function horizontalFlash(pos, piece)
                 break;
             }
             else {
-                squares_flashing.push(p);
+                kingCheck = kingVulnerable(pos, color, p)
+                if(!kingCheck)
+                {
+                    squares_flashing.push(p);
+                }
                 break;
             }
         }
         // if here, no piece found on the square so add it to the flashing set
-        squares_flashing.push(p);
+        kingCheck = kingVulnerable(pos, color, p)
+        if(!kingCheck)
+        {
+            squares_flashing.push(p);
+        }
+        else
+        {
+            break;
+        }
         // get position within row
         previous_pos = p % 8;
         // update value
@@ -466,12 +563,24 @@ function horizontalFlash(pos, piece)
                 break;
             }
             else {
-                squares_flashing.push(p);
+                kingCheck = kingVulnerable(pos, color, p)
+                if(!kingCheck)
+                {
+                    squares_flashing.push(p);
+                }
                 break;
             }
         }
         // if here, no piece found on the square so add it to the flashing set
-        squares_flashing.push(p);
+        kingCheck = kingVulnerable(pos, color, p)
+        if(!kingCheck)
+        {
+            squares_flashing.push(p);
+        }
+        else
+        {
+            break;
+        }
         // get position within row
         previous_pos = p % 8;
         p = p + 1;
@@ -493,6 +602,7 @@ function knightLMove(pos, piece)
     let squares_flashing = [];
     let row_pos = pos % 8;
     let elementCheckResponse;
+    let kingCheck;
 
     if(piece.startsWith("white"))
     {
@@ -514,11 +624,19 @@ function knightLMove(pos, piece)
             {
                 if(elementCheckResponse != "break")
                 {
-                    squares_flashing.push(p);
+                    kingCheck = kingVulnerable(pos, color, p)
+                    if(!kingCheck)
+                    {
+                        squares_flashing.push(p);
+                    }
                 }
             }
             else {
-                squares_flashing.push(p);
+                kingCheck = kingVulnerable(pos, color, p)
+                if(!kingCheck)
+                {
+                    squares_flashing.push(p);
+                }
             }
         }
     }
@@ -534,11 +652,19 @@ function knightLMove(pos, piece)
             {
                 if(elementCheckResponse != "break")
                 {
-                    squares_flashing.push(p);
+                    kingCheck = kingVulnerable(pos, color, p)
+                    if(!kingCheck)
+                    {
+                        squares_flashing.push(p);
+                    }
                 }
             }
             else {
-                squares_flashing.push(p);
+                kingCheck = kingVulnerable(pos, color, p)
+                if(!kingCheck)
+                {
+                    squares_flashing.push(p);
+                }
             }
         }
     }
@@ -554,11 +680,19 @@ function knightLMove(pos, piece)
             {
                 if(elementCheckResponse != "break")
                 {
-                    squares_flashing.push(p);
+                    kingCheck = kingVulnerable(pos, color, p)
+                    if(!kingCheck)
+                    {
+                        squares_flashing.push(p);
+                    }
                 }
             }
             else {
-                squares_flashing.push(p);
+                kingCheck = kingVulnerable(pos, color, p)
+                if(!kingCheck)
+                {
+                    squares_flashing.push(p);
+                }
             }
         }
     }
@@ -574,11 +708,19 @@ function knightLMove(pos, piece)
             {
                 if(elementCheckResponse != "break")
                 {
-                    squares_flashing.push(p);
+                    kingCheck = kingVulnerable(pos, color, p)
+                    if(!kingCheck)
+                    {
+                        squares_flashing.push(p);
+                    }
                 }
             }
             else {
-                squares_flashing.push(p);
+                kingCheck = kingVulnerable(pos, color, p)
+                if(!kingCheck)
+                {
+                    squares_flashing.push(p);
+                }
             }
         }
     }
@@ -594,11 +736,19 @@ function knightLMove(pos, piece)
             {
                 if(elementCheckResponse != "break")
                 {
-                    squares_flashing.push(p);
+                    kingCheck = kingVulnerable(pos, color, p)
+                    if(!kingCheck)
+                    {
+                        squares_flashing.push(p);
+                    }
                 }
             }
             else {
-                squares_flashing.push(p);
+                kingCheck = kingVulnerable(pos, color, p)
+                if(!kingCheck)
+                {
+                    squares_flashing.push(p);
+                }
             }
         }
     }
@@ -614,11 +764,19 @@ function knightLMove(pos, piece)
             {
                 if(elementCheckResponse != "break")
                 {
-                    squares_flashing.push(p);
+                    kingCheck = kingVulnerable(pos, color, p)
+                    if(!kingCheck)
+                    {
+                        squares_flashing.push(p);
+                    }
                 }
             }
             else {
-                squares_flashing.push(p);
+                kingCheck = kingVulnerable(pos, color, p)
+                if(!kingCheck)
+                {
+                    squares_flashing.push(p);
+                }
             }
         }
     }
@@ -634,11 +792,19 @@ function knightLMove(pos, piece)
             {
                 if(elementCheckResponse != "break")
                 {
-                    squares_flashing.push(p);
+                    kingCheck = kingVulnerable(pos, color, p)
+                    if(!kingCheck)
+                    {
+                        squares_flashing.push(p);
+                    }
                 }
             }
             else {
-                squares_flashing.push(p);
+                kingCheck = kingVulnerable(pos, color, p)
+                if(!kingCheck)
+                {
+                    squares_flashing.push(p);
+                }
             }
         }
     }
@@ -654,11 +820,19 @@ function knightLMove(pos, piece)
             {
                 if(elementCheckResponse != "break")
                 {
-                    squares_flashing.push(p);
+                    kingCheck = kingVulnerable(pos, color, p)
+                    if(!kingCheck)
+                    {
+                        squares_flashing.push(p);
+                    }
                 }
             }
             else {
-                squares_flashing.push(p);
+                kingCheck = kingVulnerable(pos, color, p)
+                if(!kingCheck)
+                {
+                    squares_flashing.push(p);
+                }
             }
         }
     }
@@ -753,7 +927,11 @@ function pawnFlash(pos, piece)
             if(elementCheckResponse == null)
             {
                 // if here, no piece found on the square so add it to the flashing set
-                squares_flashing.push(p);
+                kingCheck = kingVulnerable(pos, color, p)
+                if(!kingCheck)
+                {
+                    squares_flashing.push(p);
+                }
             }
             if(iteration == 1)
             {
@@ -767,7 +945,11 @@ function pawnFlash(pos, piece)
                     if(elemCheck2 != null)
                     {
                         // if here, no piece found on the square so add it to the flashing set
-                        squares_flashing.push(square);
+                        kingCheck = kingVulnerable(pos, color, p)
+                        if(!kingCheck)
+                        {
+                            squares_flashing.push(p);
+                        }
                     }
                 }
                 // if not at furthest left position
@@ -779,7 +961,11 @@ function pawnFlash(pos, piece)
                     if(elemCheck2 != null)
                     {
                         // if here, no piece found on the square so add it to the flashing set
-                        squares_flashing.push(square);
+                        kingCheck = kingVulnerable(pos, color, p)
+                        if(!kingCheck)
+                        {
+                            squares_flashing.push(p);
+                        }
                     }
                 }
             }
@@ -803,7 +989,11 @@ function pawnFlash(pos, piece)
             if(elementCheckResponse == null)
             {
                 // if here, no piece found on the square so add it to the flashing set
-                squares_flashing.push(p);
+                kingCheck = kingVulnerable(pos, color, p)
+                if(!kingCheck)
+                {
+                    squares_flashing.push(p);
+                }
             }
             if(iteration == 1)
             {
@@ -817,7 +1007,11 @@ function pawnFlash(pos, piece)
                     if(elemCheck2 != null)
                     {
                         // if here, no piece found on the square so add it to the flashing set
-                        squares_flashing.push(square);
+                        kingCheck = kingVulnerable(pos, color, p)
+                        if(!kingCheck)
+                        {
+                            squares_flashing.push(p);
+                        }
                     }
                 }
                 // if not at furthest left position
@@ -829,7 +1023,11 @@ function pawnFlash(pos, piece)
                     if(elemCheck2 != null)
                     {
                         // if here, no piece found on the square so add it to the flashing set
-                        squares_flashing.push(square);
+                        kingCheck = kingVulnerable(pos, color, p)
+                        if(!kingCheck)
+                        {
+                            squares_flashing.push(p);
+                        }
                     }
                 }
             }
@@ -856,6 +1054,7 @@ function pawnFlash(pos, piece)
 // returns true if the king is vulnerable, false otherwise
 function kingVulnerable(pos, color, nextPos)
 {
+    //alert("king vulnerable called");
     let kingElem;
     let kignSquare;
     if(color == "white")
@@ -867,22 +1066,19 @@ function kingVulnerable(pos, color, nextPos)
         kingElem = document.getElementById("blackKing");
     }
     kingSquare = kingElem.parentNode;
-    let vertCheck = verticalCheck(kingSquare.id, color, 0, 1);
-    alert("King in danger vertically: " + vertCheck);
-    let horizCheck = horizontalCheck(kingSquare.id, color, 0, 1);
-    alert("King in danger horizontally: " + horizCheck);
-    let diagCheck = diagonalCheck(kingSquare.id, color, 0, 1);
-    alert("King in danger diagonally: " + diagCheck);
-    let knightValid = knightCheck(kingSquare.id, color, 0, 1);
-    alert("King in danger from knight: " + knightValid);
-
-    // left off here:
-    // checks to see if the king is in danger should be done
-    // need to add this part to setting which squares to set to flashing by passing in
-    // the current piece position and where it could potentially be moving to
-    // this method should return t/f
-    // will be called when adding the values to the squares_flashing arrays
-    // if returns true, break out of the loops/don't add square to flashing set
+    let vertCheck = verticalCheck(kingSquare.id, color, pos, nextPos);
+    //alert("King in danger vertically: " + vertCheck);
+    let horizCheck = horizontalCheck(kingSquare.id, color, pos, nextPos);
+    //alert("King in danger horizontally: " + horizCheck);
+    let diagCheck = diagonalCheck(kingSquare.id, color, pos, nextPos);
+    //alert("King in danger diagonally: " + diagCheck);
+    let knightValid = knightCheck(kingSquare.id, color, pos, nextPos);
+    //alert("King in danger from knight: " + knightValid);
+    if(vertCheck || horizCheck || diagCheck || knightValid)
+    {
+        return true;
+    }
+    return false;
 }
 
 
@@ -988,6 +1184,19 @@ function horizontalCheck(pos, color, oldPiecePos, newPiecePos)
     p = p - 1;
     while(previous_pos != 0)
     {
+        // if at old piece, assume the square will be empty
+        if(p == parseInt(oldPiecePos))
+        {
+            previous_pos = p % 8;
+            p = p - 1;
+            continue;
+        }
+        // if you get to where the new piece will be, it there is something
+        // blocking the king
+        if(p == parseInt(newPiecePos))
+        {
+            break;
+        }
         elementCheckResponse = elementCheck(p, color);
         if(elementCheckResponse != null)
         {
@@ -1017,12 +1226,25 @@ function horizontalCheck(pos, color, oldPiecePos, newPiecePos)
     p = p + 1;
     while(previous_pos != 7)
     {
+        // if at old piece, assume the square will be empty
+        if(p == parseInt(oldPiecePos))
+        {
+            previous_pos = p % 8;
+            p = p + 1;
+            continue;
+        }
+        // if you get to where the new piece will be, it there is something
+        // blocking the king
+        if(p == parseInt(newPiecePos))
+        {
+            break;
+        }
         elementCheckResponse = elementCheck(p, color);
         // if there is a piece on the square
         if(elementCheckResponse != null)
         {
             // if the piece is not friendly
-            if(elementCheckResponse == "break")
+            if(elementCheckResponse != "break")
             {
                 // need to see if the piece can access the king
                 let enemyElem = document.getElementById(String(p));
@@ -1058,6 +1280,19 @@ function diagonalCheck(pos, color, oldPiecePos, newPiecePos)
     p = p - 9;
     while(p >= 0 && previous_pos != 0)
     {
+        // if at old piece, assume the square will be empty
+        if(p == parseInt(oldPiecePos))
+        {
+            previous_pos = p % 8;
+            p = p - 9;
+            continue;
+        }
+        // if you get to where the new piece will be, it there is something
+        // blocking the king
+        if(p == parseInt(newPiecePos))
+        {
+            break;
+        }
         elementCheckResponse = elementCheck(p, color);
         // if there is a piece on the square
         if(elementCheckResponse != null)
@@ -1086,8 +1321,8 @@ function diagonalCheck(pos, color, oldPiecePos, newPiecePos)
                         }
                     }
                 }
-                break;
             }
+            break;
         }
         // get position within row
         previous_pos = p % 8;
@@ -1101,6 +1336,19 @@ function diagonalCheck(pos, color, oldPiecePos, newPiecePos)
     p = p - 7;
     while(p >= 0 && previous_pos != 7)
     {
+        // if at old piece, assume the square will be empty
+        if(p == parseInt(oldPiecePos))
+        {
+            previous_pos = p % 8;
+            p = p - 7;
+            continue;
+        }
+        // if you get to where the new piece will be, it there is something
+        // blocking the king
+        if(p == parseInt(newPiecePos))
+        {
+            break;
+        }
         elementCheckResponse = elementCheck(p, color);
         // if the there is a piece on the square
         if(elementCheckResponse != null)
@@ -1127,8 +1375,8 @@ function diagonalCheck(pos, color, oldPiecePos, newPiecePos)
                         }
                     }
                 }
-                break;
             }
+            break;
         }
         // get position within row
         previous_pos = p % 8;
@@ -1141,6 +1389,19 @@ function diagonalCheck(pos, color, oldPiecePos, newPiecePos)
     p = p + 7;
     while(p < 64 && previous_pos != 0)
     {
+        // if at old piece, assume the square will be empty
+        if(p == parseInt(oldPiecePos))
+        {
+            previous_pos = p % 8;
+            p = p + 7;
+            continue;
+        }
+        // if you get to where the new piece will be, it there is something
+        // blocking the king
+        if(p == parseInt(newPiecePos))
+        {
+            break;
+        }
         elementCheckResponse = elementCheck(p, color);
         // if there is a piece on the square
         if(elementCheckResponse != null)
@@ -1167,8 +1428,8 @@ function diagonalCheck(pos, color, oldPiecePos, newPiecePos)
                         }
                     }
                 }
-                break;
             }
+            break;
         }
         // get position within row
         previous_pos = p % 8;
@@ -1182,6 +1443,19 @@ function diagonalCheck(pos, color, oldPiecePos, newPiecePos)
     p = p + 9;
     while(p < 64 && previous_pos != 7)
     {
+        // if at old piece, assume the square will be empty
+        if(p == parseInt(oldPiecePos))
+        {
+            previous_pos = p % 8;
+            p = p + 9;
+            continue;
+        }
+        // if you get to where the new piece will be, it there is something
+        // blocking the king
+        if(p == parseInt(newPiecePos))
+        {
+            break;
+        }
         elementCheckResponse = elementCheck(p, color);
         // if there is a piece on the square
         if(elementCheckResponse != null)
@@ -1208,8 +1482,8 @@ function diagonalCheck(pos, color, oldPiecePos, newPiecePos)
                         }
                     }
                 }
-                break;
             }
+            break;
         }
         // get position within row
         previous_pos = p % 8;
@@ -1463,6 +1737,4 @@ for(i = 0; i < squareElems.length; i++)
     squareElems[i].addEventListener('click', function(e){ moveToEmptySquare(e, this); }, false);
 }
 
-// for testing
-kingVulnerable(0, "white", 5)
 setInterval(flash, 1000);
