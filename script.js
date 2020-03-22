@@ -5,8 +5,45 @@ let flashing = []
 //let blackPieces = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
 
 // used to synchronzie block color change
-let flip_color = false
-let lastClicked = 0
+let flip_color = false;
+let lastClicked = -1;
+let firstClick = true;
+
+
+// this function will be called any time a square is clicked on
+function moveToEmptySquare(e, elem) {
+    e.preventDefault();
+    // done so that a click on a piece when none are set does not execute this
+    if(firstClick)
+    {
+        firstClick = false;
+        return;
+    }
+    // if there are elements in the flashing array
+    // meaning the user is trying to move some piece
+    if(flashing.length > 0)
+    {
+        // if the square clicked on is one that is flashing
+        // if the square is not in the flashing squares array, simply ignore the click
+        if(flashing.includes(parseInt(elem.id)))
+        {
+            stopFlash();
+            // get the element of the last clicked square, including the piece
+            let replacementElem = document.getElementById(String(lastClicked));
+            // get the piece
+            let pieceElem = replacementElem.innerHTML;
+            // set the empty square that was clicked on to hold the piece
+            elem.innerHTML = String(pieceElem);
+            // remove the piece from where it used to be
+            replacementElem.innerHTML = "";
+            // add an event listener to the piece again
+            elem.firstElementChild.addEventListener('click', function(e){ setFlash(e, this); }, false);
+            // set the last clicked on square to -1
+            lastClicked = -1;
+        }
+    }
+}
+
 
 // called when a block is clicked on
 // if the block was already clicked on, remove it from flashing
@@ -21,6 +58,7 @@ function setFlash(e, elem) {
     {
         lastClicked = parent.id;
         choosePiece(parent, elem);
+        firstClick = true;
     }
     // if there are squares flashing and the clicked on square is not the most recent
     else if (lastClicked != parent.id) {
@@ -33,26 +71,22 @@ function setFlash(e, elem) {
             let pieceElem = replacementElem.innerHTML;
             parent.innerHTML = String(pieceElem);
             replacementElem.innerHTML = "";
+            parent.firstElementChild.addEventListener('click', function(e){ setFlash(e, this); }, false);
             lastClicked = -1;
-// need to update moving to empty squares
-// will need a event listener on each square
-// then on click, check to make sure it is in the flashing set
-// otherwise, simply do nothing
         }
         else
         {
             stopFlash();
             lastClicked = parent.id;
             choosePiece(parent, elem);
+            firstClick = true;
         }
-//left off here; first get pieces to flash correctly, then handle flashing on occupied spots
-//still need to add id and class to white pieces
     }
     // if clicked on the square that is flashing and was the last clicked on
     else
     {
         stopFlash();
-        lastClicked = 0;
+        lastClicked = -1;
     }
 }
 
@@ -815,12 +849,23 @@ function pawnFlash(pos, piece)
 
 // get all the blocks
 //elems = document.querySelectorAll(".square");
-elems = document.getElementsByTagName('img');
-let i = 0;
+var elems = document.getElementsByTagName('img');
+var i = 0;
 for(i = 0; i < elems.length; i++)
 {
     // add a click listener to each block
     elems[i].addEventListener('click', function(e){ setFlash(e, this); }, false);
 }
+
+var squareElems = document.querySelectorAll(".square");
+i = 0;
+for(i = 0; i < squareElems.length; i++)
+{
+    // add a click event listener to each on the board
+    // note: could potentially have a issue here if there is a piece on a square
+    // and the event for the piece occurs and the event for the square occurs
+    squareElems[i].addEventListener('click', function(e){ moveToEmptySquare(e, this); }, false);
+}
+
 
 setInterval(flash, 1000);
