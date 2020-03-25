@@ -116,6 +116,10 @@ function choosePiece(parent, elem)
     {
         pawnFlash(parent.id, elem.id);
     }
+    else if(elem.id.includes("King"))
+    {
+        kingFlash(parent.id, elem.id);
+    }
 
 }
 
@@ -257,7 +261,7 @@ function diagonalFlash(pos, piece)
                 break;
             }
             else {
-                kingCheck = kingVulnerable(pos, color, p)
+                kingCheck = kingVulnerable(pos, color, p, false);
                 if(!kingCheck)
                 {
                     squares_flashing.push(p);
@@ -265,7 +269,7 @@ function diagonalFlash(pos, piece)
                 break;
             }
         }
-        kingCheck = kingVulnerable(pos, color, p)
+        kingCheck = kingVulnerable(pos, color, p, false);
         if(!kingCheck)
         {
             squares_flashing.push(p);
@@ -294,7 +298,7 @@ function diagonalFlash(pos, piece)
                 break;
             }
             else {
-                kingCheck = kingVulnerable(pos, color, p)
+                kingCheck = kingVulnerable(pos, color, p, false);
                 if(!kingCheck)
                 {
                     squares_flashing.push(p);
@@ -302,7 +306,7 @@ function diagonalFlash(pos, piece)
                 break;
             }
         }
-        kingCheck = kingVulnerable(pos, color, p)
+        kingCheck = kingVulnerable(pos, color, p, false);
         if(!kingCheck)
         {
             squares_flashing.push(p);
@@ -330,7 +334,7 @@ function diagonalFlash(pos, piece)
                 break;
             }
             else {
-                kingCheck = kingVulnerable(pos, color, p);
+                kingCheck = kingVulnerable(pos, color, p, false);
                 if(!kingCheck)
                 {
                     squares_flashing.push(p);
@@ -339,7 +343,7 @@ function diagonalFlash(pos, piece)
             }
         }
         // if here, no piece found on the square so add it to the flashing set
-        kingCheck = kingVulnerable(pos, color, p)
+        kingCheck = kingVulnerable(pos, color, p, false);
         if(!kingCheck)
         {
             squares_flashing.push(p);
@@ -368,7 +372,7 @@ function diagonalFlash(pos, piece)
                 break;
             }
             else {
-                kingCheck = kingVulnerable(pos, color, p)
+                kingCheck = kingVulnerable(pos, color, p, false);
                 if(!kingCheck)
                 {
                     squares_flashing.push(p);
@@ -376,7 +380,7 @@ function diagonalFlash(pos, piece)
                 break;
             }
         }
-        kingCheck = kingVulnerable(pos, color, p)
+        kingCheck = kingVulnerable(pos, color, p, false);
         if(!kingCheck)
         {
             squares_flashing.push(p);
@@ -430,7 +434,7 @@ function verticalFlash(pos, piece)
                 break;
             }
             else {
-                kingCheck = kingVulnerable(pos, color, p)
+                kingCheck = kingVulnerable(pos, color, p, false);
                 if(!kingCheck)
                 {
                     squares_flashing.push(p);
@@ -439,7 +443,7 @@ function verticalFlash(pos, piece)
             }
         }
         // if here, no piece found on the square so add it to the flashing set
-        kingCheck = kingVulnerable(pos, color, p);
+        kingCheck = kingVulnerable(pos, color, p, false);
         if(!kingCheck)
         {
             squares_flashing.push(p);
@@ -464,7 +468,7 @@ function verticalFlash(pos, piece)
                 break;
             }
             else {
-                kingCheck = kingVulnerable(pos, color, p)
+                kingCheck = kingVulnerable(pos, color, p, false);
                 if(!kingCheck)
                 {
                     squares_flashing.push(p);
@@ -473,7 +477,7 @@ function verticalFlash(pos, piece)
             }
         }
         // if here, no piece found on the square so add it to the flashing set
-        kingCheck = kingVulnerable(pos, color, p)
+        kingCheck = kingVulnerable(pos, color, p, false);
         if(!kingCheck)
         {
             squares_flashing.push(p);
@@ -525,7 +529,7 @@ function horizontalFlash(pos, piece)
                 break;
             }
             else {
-                kingCheck = kingVulnerable(pos, color, p)
+                kingCheck = kingVulnerable(pos, color, p, false);
                 if(!kingCheck)
                 {
                     squares_flashing.push(p);
@@ -534,7 +538,7 @@ function horizontalFlash(pos, piece)
             }
         }
         // if here, no piece found on the square so add it to the flashing set
-        kingCheck = kingVulnerable(pos, color, p)
+        kingCheck = kingVulnerable(pos, color, p, false);
         if(!kingCheck)
         {
             squares_flashing.push(p);
@@ -563,7 +567,7 @@ function horizontalFlash(pos, piece)
                 break;
             }
             else {
-                kingCheck = kingVulnerable(pos, color, p)
+                kingCheck = kingVulnerable(pos, color, p, false);
                 if(!kingCheck)
                 {
                     squares_flashing.push(p);
@@ -572,7 +576,7 @@ function horizontalFlash(pos, piece)
             }
         }
         // if here, no piece found on the square so add it to the flashing set
-        kingCheck = kingVulnerable(pos, color, p)
+        kingCheck = kingVulnerable(pos, color, p, false);
         if(!kingCheck)
         {
             squares_flashing.push(p);
@@ -624,7 +628,7 @@ function knightLMove(pos, piece)
             {
                 if(elementCheckResponse != "break")
                 {
-                    kingCheck = kingVulnerable(pos, color, p)
+                    kingCheck = kingVulnerable(pos, color, p, false);
                     if(!kingCheck)
                     {
                         squares_flashing.push(p);
@@ -632,7 +636,7 @@ function knightLMove(pos, piece)
                 }
             }
             else {
-                kingCheck = kingVulnerable(pos, color, p)
+                kingCheck = kingVulnerable(pos, color, p, false);
                 if(!kingCheck)
                 {
                     squares_flashing.push(p);
@@ -652,7 +656,7 @@ function knightLMove(pos, piece)
             {
                 if(elementCheckResponse != "break")
                 {
-                    kingCheck = kingVulnerable(pos, color, p)
+                    kingCheck = kingVulnerable(pos, color, p, false);
                     if(!kingCheck)
                     {
                         squares_flashing.push(p);
@@ -660,7 +664,7 @@ function knightLMove(pos, piece)
                 }
             }
             else {
-                kingCheck = kingVulnerable(pos, color, p)
+                kingCheck = kingVulnerable(pos, color, p, false);
                 if(!kingCheck)
                 {
                     squares_flashing.push(p);
@@ -680,7 +684,7 @@ function knightLMove(pos, piece)
             {
                 if(elementCheckResponse != "break")
                 {
-                    kingCheck = kingVulnerable(pos, color, p)
+                    kingCheck = kingVulnerable(pos, color, p, false);
                     if(!kingCheck)
                     {
                         squares_flashing.push(p);
@@ -688,7 +692,7 @@ function knightLMove(pos, piece)
                 }
             }
             else {
-                kingCheck = kingVulnerable(pos, color, p)
+                kingCheck = kingVulnerable(pos, color, p, false);
                 if(!kingCheck)
                 {
                     squares_flashing.push(p);
@@ -708,7 +712,7 @@ function knightLMove(pos, piece)
             {
                 if(elementCheckResponse != "break")
                 {
-                    kingCheck = kingVulnerable(pos, color, p)
+                    kingCheck = kingVulnerable(pos, color, p, false);
                     if(!kingCheck)
                     {
                         squares_flashing.push(p);
@@ -716,7 +720,7 @@ function knightLMove(pos, piece)
                 }
             }
             else {
-                kingCheck = kingVulnerable(pos, color, p)
+                kingCheck = kingVulnerable(pos, color, p, false);
                 if(!kingCheck)
                 {
                     squares_flashing.push(p);
@@ -736,7 +740,7 @@ function knightLMove(pos, piece)
             {
                 if(elementCheckResponse != "break")
                 {
-                    kingCheck = kingVulnerable(pos, color, p)
+                    kingCheck = kingVulnerable(pos, color, p, false);
                     if(!kingCheck)
                     {
                         squares_flashing.push(p);
@@ -744,7 +748,7 @@ function knightLMove(pos, piece)
                 }
             }
             else {
-                kingCheck = kingVulnerable(pos, color, p)
+                kingCheck = kingVulnerable(pos, color, p, false);
                 if(!kingCheck)
                 {
                     squares_flashing.push(p);
@@ -764,7 +768,7 @@ function knightLMove(pos, piece)
             {
                 if(elementCheckResponse != "break")
                 {
-                    kingCheck = kingVulnerable(pos, color, p)
+                    kingCheck = kingVulnerable(pos, color, p, false);
                     if(!kingCheck)
                     {
                         squares_flashing.push(p);
@@ -772,7 +776,7 @@ function knightLMove(pos, piece)
                 }
             }
             else {
-                kingCheck = kingVulnerable(pos, color, p)
+                kingCheck = kingVulnerable(pos, color, p, false);
                 if(!kingCheck)
                 {
                     squares_flashing.push(p);
@@ -792,7 +796,7 @@ function knightLMove(pos, piece)
             {
                 if(elementCheckResponse != "break")
                 {
-                    kingCheck = kingVulnerable(pos, color, p)
+                    kingCheck = kingVulnerable(pos, color, p, false);
                     if(!kingCheck)
                     {
                         squares_flashing.push(p);
@@ -800,7 +804,7 @@ function knightLMove(pos, piece)
                 }
             }
             else {
-                kingCheck = kingVulnerable(pos, color, p)
+                kingCheck = kingVulnerable(pos, color, p, false);
                 if(!kingCheck)
                 {
                     squares_flashing.push(p);
@@ -820,7 +824,7 @@ function knightLMove(pos, piece)
             {
                 if(elementCheckResponse != "break")
                 {
-                    kingCheck = kingVulnerable(pos, color, p)
+                    kingCheck = kingVulnerable(pos, color, p, false);
                     if(!kingCheck)
                     {
                         squares_flashing.push(p);
@@ -828,7 +832,7 @@ function knightLMove(pos, piece)
                 }
             }
             else {
-                kingCheck = kingVulnerable(pos, color, p)
+                kingCheck = kingVulnerable(pos, color, p, false);
                 if(!kingCheck)
                 {
                     squares_flashing.push(p);
@@ -927,7 +931,7 @@ function pawnFlash(pos, piece)
             if(elementCheckResponse == null)
             {
                 // if here, no piece found on the square so add it to the flashing set
-                kingCheck = kingVulnerable(pos, color, p)
+                kingCheck = kingVulnerable(pos, color, p, false);
                 if(!kingCheck)
                 {
                     squares_flashing.push(p);
@@ -945,7 +949,7 @@ function pawnFlash(pos, piece)
                     if(elemCheck2 != null)
                     {
                         // if here, no piece found on the square so add it to the flashing set
-                        kingCheck = kingVulnerable(pos, color, p)
+                        kingCheck = kingVulnerable(pos, color, p, false);
                         if(!kingCheck)
                         {
                             squares_flashing.push(p);
@@ -961,7 +965,7 @@ function pawnFlash(pos, piece)
                     if(elemCheck2 != null)
                     {
                         // if here, no piece found on the square so add it to the flashing set
-                        kingCheck = kingVulnerable(pos, color, p)
+                        kingCheck = kingVulnerable(pos, color, p, false);
                         if(!kingCheck)
                         {
                             squares_flashing.push(p);
@@ -989,7 +993,7 @@ function pawnFlash(pos, piece)
             if(elementCheckResponse == null)
             {
                 // if here, no piece found on the square so add it to the flashing set
-                kingCheck = kingVulnerable(pos, color, p)
+                kingCheck = kingVulnerable(pos, color, p, false);
                 if(!kingCheck)
                 {
                     squares_flashing.push(p);
@@ -1007,7 +1011,7 @@ function pawnFlash(pos, piece)
                     if(elemCheck2 != null)
                     {
                         // if here, no piece found on the square so add it to the flashing set
-                        kingCheck = kingVulnerable(pos, color, p)
+                        kingCheck = kingVulnerable(pos, color, p, false);
                         if(!kingCheck)
                         {
                             squares_flashing.push(p);
@@ -1023,7 +1027,7 @@ function pawnFlash(pos, piece)
                     if(elemCheck2 != null)
                     {
                         // if here, no piece found on the square so add it to the flashing set
-                        kingCheck = kingVulnerable(pos, color, p)
+                        kingCheck = kingVulnerable(pos, color, p, false);
                         if(!kingCheck)
                         {
                             squares_flashing.push(p);
@@ -1049,36 +1053,160 @@ function pawnFlash(pos, piece)
     console.log(squares_flashing);
 }
 
+function kingFlash(pos, piece)
+{
+    pos = parseInt(pos);
+    let p = pos;
+    let color = "";
+    let squares_flashing = [];
+    let elementCheckResponse;
+    let elemCheck2;
+    let row_pos = pos % 8;
+
+    if(piece.startsWith("white"))
+    {
+        color = "white";
+    }
+    else
+    {
+        color = "black";
+    }
+    let iteration = 0;
+    while(iteration < 8)
+    //if(p >= 0)
+    {
+        // check right
+        if(iteration == 0 && row_pos != 7)
+        {
+            p = pos + 1;
+        }
+        // check down right
+        else if(iteration == 1 && row_pos != 7 && pos < 56 )
+        {
+            p = pos + 9;
+        }
+        // for down 1
+        else if(iteration == 2 && pos < 56 )
+        {
+            p = pos + 8;
+        }
+        // for down left
+        else if(iteration == 3 && row_pos != 0 && pos < 56 )
+        {
+            p = pos + 7;
+        }
+        // for left
+        else if(iteration == 4 && row_pos != 0)
+        {
+            p = pos - 1;
+        }
+        // for up left
+        else if(iteration == 5 && row_pos != 0 && pos > 7)
+        {
+            p = pos - 9;
+        }
+        // for up
+        else if(iteration == 6 && pos > 7 )
+        {
+            p = pos - 8;
+        }
+        // for up right
+        else if(iteration == 7 && row_pos != 7 && pos < 56 )
+        {
+            p = pos - 7;
+        }
+        else
+        {
+            iteration++;
+            continue;
+        }
+        elementCheckResponse = elementCheck(p);
+        // check in front
+        if(elementCheckResponse == null)
+        {
+            elementCheckResponse = elementCheck(p, color);
+            if(elementCheckResponse != null)
+            {
+                if(elementCheckResponse != "break")
+                {
+                    // could have issue here as this is the king...
+                    kingCheck = kingVulnerable(pos, color, p, true);
+                    if(!kingCheck)
+                    {
+                        squares_flashing.push(p);
+                    }
+                }
+            }
+            else {
+                // could have issue here as this is the king
+                kingCheck = kingVulnerable(pos, color, p, true);
+                if(!kingCheck)
+                {
+                    squares_flashing.push(p);
+                }
+            }
+        }
+        iteration++;
+    }
+    squares_flashing.push(pos);
+    flashing = flashing.concat(squares_flashing);
+    // remove duplicates
+    flashing = flashing.filter( function( item, index, inputArray ) {
+           return inputArray.indexOf(item) == index;
+    });
+    console.log(squares_flashing);
+}
+
 // this function will check if a piece is moved to a certain spot,
 // will it leave the king vulnerable
 // returns true if the king is vulnerable, false otherwise
-function kingVulnerable(pos, color, nextPos)
+function kingVulnerable(pos, color, nextPos, kingPiece)
 {
     //alert("king vulnerable called");
     let kingElem;
     let kignSquare;
-    if(color == "white")
+    // just added this in
+    if(!kingPiece)
     {
-        kingElem = document.getElementById("whiteKing");
+        if(color == "white")
+        {
+            kingElem = document.getElementById("whiteKing");
+        }
+        else
+        {
+            kingElem = document.getElementById("blackKing");
+        }
+        kingSquare = kingElem.parentNode;
+        let vertCheck = verticalCheck(kingSquare.id, color, pos, nextPos);
+        //alert("King in danger vertically: " + vertCheck);
+        let horizCheck = horizontalCheck(kingSquare.id, color, pos, nextPos);
+        //alert("King in danger horizontally: " + horizCheck);
+        let diagCheck = diagonalCheck(kingSquare.id, color, pos, nextPos);
+        //alert("King in danger diagonally: " + diagCheck);
+        let knightValid = knightCheck(kingSquare.id, color, pos, nextPos);
+        //alert("King in danger from knight: " + knightValid);
+        if(vertCheck || horizCheck || diagCheck || knightValid)
+        {
+            return true;
+        }
+        return false;
     }
     else
     {
-        kingElem = document.getElementById("blackKing");
+        let vertCheck = verticalCheck(nextPos, color, pos, nextPos);
+        //alert("King in danger vertically: " + vertCheck);
+        let horizCheck = horizontalCheck(nextPos, color, pos, nextPos);
+        //alert("King in danger horizontally: " + horizCheck);
+        let diagCheck = diagonalCheck(nextPos, color, pos, nextPos);
+        //alert("King in danger diagonally: " + diagCheck);
+        let knightValid = knightCheck(nextPos, color, pos, nextPos);
+        //alert("King in danger from knight: " + knightValid);
+        if(vertCheck || horizCheck || diagCheck || knightValid)
+        {
+            return true;
+        }
+        return false;
     }
-    kingSquare = kingElem.parentNode;
-    let vertCheck = verticalCheck(kingSquare.id, color, pos, nextPos);
-    //alert("King in danger vertically: " + vertCheck);
-    let horizCheck = horizontalCheck(kingSquare.id, color, pos, nextPos);
-    //alert("King in danger horizontally: " + horizCheck);
-    let diagCheck = diagonalCheck(kingSquare.id, color, pos, nextPos);
-    //alert("King in danger diagonally: " + diagCheck);
-    let knightValid = knightCheck(kingSquare.id, color, pos, nextPos);
-    //alert("King in danger from knight: " + knightValid);
-    if(vertCheck || horizCheck || diagCheck || knightValid)
-    {
-        return true;
-    }
-    return false;
 }
 
 
