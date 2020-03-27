@@ -949,10 +949,10 @@ function pawnFlash(pos, piece)
                     if(elemCheck2 != null)
                     {
                         // if here, no piece found on the square so add it to the flashing set
-                        kingCheck = kingVulnerable(pos, color, p, false);
+                        kingCheck = kingVulnerable(pos, color, square, false);
                         if(!kingCheck)
                         {
-                            squares_flashing.push(p);
+                            squares_flashing.push(square);
                         }
                     }
                 }
@@ -965,10 +965,10 @@ function pawnFlash(pos, piece)
                     if(elemCheck2 != null)
                     {
                         // if here, no piece found on the square so add it to the flashing set
-                        kingCheck = kingVulnerable(pos, color, p, false);
+                        kingCheck = kingVulnerable(pos, color, square, false);
                         if(!kingCheck)
                         {
-                            squares_flashing.push(p);
+                            squares_flashing.push(square);
                         }
                     }
                 }
@@ -1011,10 +1011,10 @@ function pawnFlash(pos, piece)
                     if(elemCheck2 != null)
                     {
                         // if here, no piece found on the square so add it to the flashing set
-                        kingCheck = kingVulnerable(pos, color, p, false);
+                        kingCheck = kingVulnerable(pos, color, square, false);
                         if(!kingCheck)
                         {
-                            squares_flashing.push(p);
+                            squares_flashing.push(square);
                         }
                     }
                 }
@@ -1027,10 +1027,10 @@ function pawnFlash(pos, piece)
                     if(elemCheck2 != null)
                     {
                         // if here, no piece found on the square so add it to the flashing set
-                        kingCheck = kingVulnerable(pos, color, p, false);
+                        kingCheck = kingVulnerable(pos, color, square, false);
                         if(!kingCheck)
                         {
-                            squares_flashing.push(p);
+                            squares_flashing.push(square);
                         }
                     }
                 }
@@ -1120,30 +1120,29 @@ function kingFlash(pos, piece)
             iteration++;
             continue;
         }
-        elementCheckResponse = elementCheck(p);
-        // check in front
-        if(elementCheckResponse == null)
+        elementCheckResponse = elementCheck(p, color);
+        // if there is a piece on the square
+        if(elementCheckResponse != null)
         {
-            elementCheckResponse = elementCheck(p, color);
-            if(elementCheckResponse != null)
+            // if the piece is not friendly
+            if(elementCheckResponse != "break")
             {
-                if(elementCheckResponse != "break")
-                {
                     // could have issue here as this is the king...
+                    console.log(p);
                     kingCheck = kingVulnerable(pos, color, p, true);
                     if(!kingCheck)
                     {
                         squares_flashing.push(p);
                     }
-                }
             }
-            else {
-                // could have issue here as this is the king
-                kingCheck = kingVulnerable(pos, color, p, true);
-                if(!kingCheck)
-                {
-                    squares_flashing.push(p);
-                }
+        }
+        else {
+            // else, no piece on the square
+            // could have issue here as this is the king
+            kingCheck = kingVulnerable(pos, color, p, true);
+            if(!kingCheck)
+            {
+                squares_flashing.push(p);
             }
         }
         iteration++;
@@ -1194,13 +1193,9 @@ function kingVulnerable(pos, color, nextPos, kingPiece)
     else
     {
         let vertCheck = verticalCheck(nextPos, color, pos, nextPos);
-        //alert("King in danger vertically: " + vertCheck);
         let horizCheck = horizontalCheck(nextPos, color, pos, nextPos);
-        //alert("King in danger horizontally: " + horizCheck);
         let diagCheck = diagonalCheck(nextPos, color, pos, nextPos);
-        //alert("King in danger diagonally: " + diagCheck);
         let knightValid = knightCheck(nextPos, color, pos, nextPos);
-        //alert("King in danger from knight: " + knightValid);
         if(vertCheck || horizCheck || diagCheck || knightValid)
         {
             return true;
